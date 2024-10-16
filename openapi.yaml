@@ -2,8 +2,8 @@ openapi: 3.1.0
 info:
   title: Paperless REST-Server
   contact:
-    name: Bernhard Wallisch
-    url: https://www.technikum-wien.at/personal/bernhard-wallisch/
+    name: Frimberger, Tetcu
+    url: https://www.technikum-wien.at/personal/frimberger-tetcu/
   version: 1.0.0
 servers:
   - url: 'localhost:8081'
