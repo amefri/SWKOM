@@ -22,6 +22,4 @@ public class PaperlessApiController implements PaperlessApi {
     public Optional<NativeWebRequest> getRequest() {
         return Optional.ofNullable(request);
     }
-
-    // Hier kannst du bei Bedarf die Methoden aus PaperlessApi überschreiben und mit richtiger Logik füllen.
 }
