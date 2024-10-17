@@ -141,7 +141,11 @@ hs_err_pid*
 replay_pid*
 
 ### Maven ###
+<<<<<<< HEAD
 target/
+=======
+out/target/
+>>>>>>> 813d54826e39b0a624c2e5429b884dceca76a107
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup

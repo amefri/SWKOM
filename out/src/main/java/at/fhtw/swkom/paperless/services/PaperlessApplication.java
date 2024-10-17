@@ -1,6 +1,5 @@
 package at.fhtw.swkom.paperless.services;
 
-import com.fasterxml.jackson.databind.Module;
 import org.openapitools.jackson.nullable.JsonNullableModule;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,7 +15,7 @@ public class PaperlessApplication {
     }
 
     @Bean
-    public Module jsonNullableModule() {
+    public JsonNullableModule jsonNullableModule() {
         return new JsonNullableModule();
     }
 }
