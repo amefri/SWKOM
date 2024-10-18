@@ -25,9 +25,13 @@ paths:
         "400":
           description: Document upload failed due to bad request!
       summary: Upload a document
+      tags:
+      - paperless
       x-content-type: multipart/form-data
       x-accepts:
       - application/json
+      x-tags:
+      - tag: paperless
   /api/documents:
     get:
       operationId: getDocuments
@@ -39,8 +43,12 @@ paths:
                 $ref: '#/components/schemas/documents'
           description: Success
       summary: Return a list of documents
+      tags:
+      - paperless
       x-accepts:
       - application/json
+      x-tags:
+      - tag: paperless
   /api/documents/{id}:
     delete:
       operationId: deleteDocument
@@ -59,8 +67,12 @@ paths:
         "404":
           description: Document does not exist with this id!
       summary: Delete a document by id
+      tags:
+      - paperless
       x-accepts:
       - application/json
+      x-tags:
+      - tag: paperless
     get:
       operationId: getDocument
       parameters:
@@ -82,8 +94,12 @@ paths:
         "404":
           description: Document does not exist with this id!
       summary: Retrieve a document by id
+      tags:
+      - paperless
       x-accepts:
       - application/json
+      x-tags:
+      - tag: paperless
     put:
       operationId: updateDocument
       parameters:
@@ -101,8 +117,12 @@ paths:
         "404":
           description: Document does not exist with this id
       summary: Update a document by id
+      tags:
+      - paperless
       x-accepts:
       - application/json
+      x-tags:
+      - tag: paperless
 components:
   schemas:
     document:

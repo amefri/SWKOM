@@ -13,6 +13,8 @@ tags:
 paths:
   /api/documents/post_document:
     post:
+      tags:
+        - paperless
       summary: "Upload a document"
       operationId: postDocument
       requestBody:
@@ -33,6 +35,8 @@ paths:
           description: "Document upload failed due to bad request!"
   /api/documents:
     get:
+      tags:
+        - paperless
       summary: "Return a list of documents"
       operationId: getDocuments
       responses:
@@ -44,6 +48,8 @@ paths:
                 $ref: '#/components/schemas/documents'
   /api/documents/{id}:
     get:
+      tags:
+        - paperless
       summary: "Retrieve a document by id"
       operationId: getDocument
       parameters:
@@ -63,6 +69,8 @@ paths:
         404:
           description: "Document does not exist with this id!"
     delete:
+      tags:
+        - paperless
       summary: "Delete a document by id"
       operationId: deleteDocument
       parameters:
@@ -78,6 +86,8 @@ paths:
         404:
           description: "Document does not exist with this id!"
     put:
+      tags:
+        - paperless
       summary: "Update a document by id"
       operationId: updateDocument
       parameters:
