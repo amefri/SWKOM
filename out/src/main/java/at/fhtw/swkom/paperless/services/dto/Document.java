@@ -20,7 +20,7 @@ import jakarta.annotation.Generated;
  */
 
 @JsonTypeName("document")
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-18T20:34:19.063161464Z[Etc/UTC]", comments = "Generator version: 7.10.0-SNAPSHOT")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-18T20:48:34.953341258Z[Etc/UTC]", comments = "Generator version: 7.10.0-SNAPSHOT")
 public class Document {
 
   private Integer id;
