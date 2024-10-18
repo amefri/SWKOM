@@ -1,5 +1,6 @@
 package at.fhtw.swkom.paperless.services;
 
+
 import org.openapitools.jackson.nullable.JsonNullableModule;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
