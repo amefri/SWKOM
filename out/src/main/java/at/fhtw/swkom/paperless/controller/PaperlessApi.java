@@ -33,7 +33,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-18T20:48:34.953341258Z[Etc/UTC]", comments = "Generator version: 7.10.0-SNAPSHOT")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-10-18T20:56:04.502791654Z[Etc/UTC]", comments = "Generator version: 7.10.0-SNAPSHOT")
 @Validated
 @Controller
 @Tag(name = "paperless", description = "Paperless REST-Api")
