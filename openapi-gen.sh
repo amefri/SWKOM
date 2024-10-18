@@ -19,8 +19,12 @@ MSYS_NO_PATHCONV=1 docker run \
   --model-package at.fhtw.swkom.paperless.services.dto \
   --additional-properties configPackage=at.fhtw.swkom.paperless.config \
   --additional-properties basePackage=at.fhtw.swkom.paperless \
+  --additional-properties apiName=Paperless \
   --additional-properties useSpringBoot3=true \
   --additional-properties useJakartaEe=true \
+  --additional-properties requestMappingMode=controller \
+  --additional-properties useSpringController=true \
+  --additional-properties useTags=true \
   -o /tmp/out/
 
 docker cp openapi-gen:/tmp/out/ ./out/

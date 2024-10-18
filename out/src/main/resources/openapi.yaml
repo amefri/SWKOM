@@ -7,6 +7,9 @@ info:
   version: 1.0.0
 servers:
 - url: localhost:8081
+tags:
+- description: Paperless REST-Api
+  name: paperless
 paths:
   /api/documents/post_document:
     post:

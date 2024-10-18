@@ -5,9 +5,9 @@ src/main/java/at/fhtw/swkom/paperless/OpenApiGeneratorApplication.java
 src/main/java/at/fhtw/swkom/paperless/RFC3339DateFormat.java
 src/main/java/at/fhtw/swkom/paperless/config/HomeController.java
 src/main/java/at/fhtw/swkom/paperless/config/SpringDocConfiguration.java
-src/main/java/at/fhtw/swkom/paperless/controller/ApiApi.java
-src/main/java/at/fhtw/swkom/paperless/controller/ApiApiController.java
 src/main/java/at/fhtw/swkom/paperless/controller/ApiUtil.java
+src/main/java/at/fhtw/swkom/paperless/controller/DefaultApi.java
+src/main/java/at/fhtw/swkom/paperless/controller/DefaultApiController.java
 src/main/java/at/fhtw/swkom/paperless/services/dto/Document.java
 src/main/resources/application.properties
 src/main/resources/openapi.yaml
