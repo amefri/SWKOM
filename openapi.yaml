@@ -3,7 +3,7 @@ info:
   title: Paperless REST-Server
   contact:
     name: Frimberger, Tetcu
-    url: https://www.technikum-wien.at/personal/frimberger-tetcu/
+    url: https://github.com/amefri/SWKOM/tree/main
   version: 1.0.0
 servers:
   - url: 'localhost:8081'
@@ -74,6 +74,21 @@ paths:
           description: "Document deleted successfully"
         404:
           description: "Document does not exist with this id!"
+    put:
+      summary: "Update a document by id"
+      operationId: updateDocument
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The id of document
+      responses:
+        204:
+          description: "Document updated successfully"
+        404:
+          description: "Document does not exist with this id"
 components:
   schemas:
     document:

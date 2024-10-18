@@ -2,7 +2,11 @@
 #
 # Spring Generator Configuration-Parameters reference, see https://openapi-generator.tech/docs/generators/spring/
 #
-docker run \
+
+# Delete old generated sources if they already exist to avoid residual files
+rm -rf ./out/
+
+MSYS_NO_PATHCONV=1 docker run \
   --name openapi-gen \
   -v ${PWD}:/local \
   openapitools/openapi-generator-cli generate \
@@ -14,7 +18,7 @@ docker run \
   --api-package at.fhtw.swkom.paperless.controller \
   --model-package at.fhtw.swkom.paperless.services.dto \
   --additional-properties configPackage=at.fhtw.swkom.paperless.config \
-  --additional-properties basePackage=at.fhtw.swkom.paperless.services \
+  --additional-properties basePackage=at.fhtw.swkom.paperless \
   --additional-properties useSpringBoot3=true \
   --additional-properties useJakartaEe=true \
   -o /tmp/out/

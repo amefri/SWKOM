@@ -1,8 +1,8 @@
 openapi: 3.1.0
 info:
   contact:
-    name: Bernhard Wallisch
-    url: https://www.technikum-wien.at/personal/bernhard-wallisch/
+    name: "Frimberger, Tetcu"
+    url: https://github.com/amefri/SWKOM/tree/main
   title: Paperless REST-Server
   version: 1.0.0
 servers:
@@ -79,6 +79,25 @@ paths:
         "404":
           description: Document does not exist with this id!
       summary: Retrieve a document by id
+      x-accepts:
+      - application/json
+    put:
+      operationId: updateDocument
+      parameters:
+      - description: The id of document
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "204":
+          description: Document updated successfully
+        "404":
+          description: Document does not exist with this id
+      summary: Update a document by id
       x-accepts:
       - application/json
 components:
