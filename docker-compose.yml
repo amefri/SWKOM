@@ -1,0 +1,33 @@
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: paperless
+      POSTGRES_PASSWORD: paperless
+      POSTGRES_DB: paperless
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  rest:
+    build: out
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/paperless
+      SPRING_DATASOURCE_USERNAME: paperless
+      SPRING_DATASOURCE_PASSWORD: paperless
+    depends_on:
+      - db
+
+  frontend:
+    build: ./ui
+    ports:
+      - "80:80"
+    depends_on:
+      - rest
+
+volumes:
+  postgres_data:
