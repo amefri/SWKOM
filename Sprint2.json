@@ -1,0 +1,290 @@
+{
+  "courseName" : "BIF5-SWKOM-WS24_L2L3",
+  "assignmentName" : "Sprint2",
+  "tasks" : [ {
+    "title" : "1.1 Provided Submission / Git Repo",
+    "className" : "CheckRepoUrlValid",
+    "maxGrade" : 5.0,
+    "withGrading" : true,
+    "parameters" : [ ]
+  }, {
+    "title" : "1.2 Extracted ZIP / Git clone",
+    "className" : "CheckRepoClone",
+    "maxGrade" : 5.0,
+    "withGrading" : true,
+    "parameters" : [ {
+      "name" : "overwriteExisting",
+      "value" : true
+    } ]
+  }, {
+    "title" : "2. Application Build ok (without tests)",
+    "className" : "CheckMavenBuild",
+    "maxGrade" : 5.0,
+    "withGrading" : true,
+    "parameters" : [ {
+      "name" : "skipTests",
+      "value" : true
+    }, {
+      "name" : "rebuildExisting",
+      "value" : false
+    } ]
+  }, {
+    "title" : "3.1 File Checks: docker-compose.yml",
+    "className" : "CheckSourceFiles",
+    "maxGrade" : 10.0,
+    "withGrading" : true,
+    "parameters" : [ {
+      "name" : "setRootPath",
+      "value" : "/"
+    }, {
+      "name" : "selectFile",
+      "value" : "docker-compose.yml"
+    }, {
+      "name" : "containsText",
+      "value" : "ui:"
+    }, {
+      "name" : "containsText",
+      "value" : "80:80"
+    }, {
+      "name" : "containsText",
+      "value" : "rest:"
+    }, {
+      "name" : "containsText",
+      "value" : "8081:"
+    } ]
+  }, {
+    "title" : "3.2 File Checks: Frontend Dockerfile",
+    "className" : "CheckSourceFiles",
+    "maxGrade" : 10.0,
+    "withGrading" : true,
+    "parameters" : [ {
+      "name" : "setRootPath",
+      "value" : "/"
+    }, {
+      "name" : "selectFile",
+      "value" : "ui/Dockerfile"
+    }, {
+      "name" : "containsText",
+      "value" : "FROM nginx"
+    } ]
+  }, {
+    "title" : "3.3 File Checks: nginx Config",
+    "className" : "CheckSourceFiles",
+    "maxGrade" : 10.0,
+    "withGrading" : true,
+    "parameters" : [ {
+      "name" : "setRootPath",
+      "value" : "/"
+    }, {
+      "name" : "selectFile",
+      "value" : "nginx.conf"
+    }, {
+      "name" : "containsText",
+      "value" : "location /api/ "
+    }, {
+      "name" : "containsText",
+      "value" : "proxy_pass"
+    }, {
+      "name" : "containsText",
+      "value" : "location / "
+    }, {
+      "name" : "containsText",
+      "value" : "try_files"
+    } ]
+  }, {
+    "title" : "4. Application Tests ok (Spring Boot Context)",
+    "className" : "CheckMavenBuild",
+    "maxGrade" : 5.0,
+    "withGrading" : true,
+    "parameters" : [ {
+      "name" : "skipTests",
+      "value" : false
+    }, {
+      "name" : "rebuildExisting",
+      "value" : false
+    } ]
+  }, {
+    "title" : "5. Component-Tests (docker compose up)",
+    "className" : "CheckDockerCompose",
+    "maxGrade" : 5.0,
+    "withGrading" : true,
+    "parameters" : [ {
+      "name" : "command",
+      "value" : "up"
+    }, {
+      "name" : "param",
+      "value" : "-d"
+    } ]
+  }, {
+    "title" : "5.1 Rest-API POST http://localhost/api/documents/post_document",
+    "className" : "CheckHttpRequest",
+    "maxGrade" : 5.0,
+    "withGrading" : true,
+    "parameters" : [ {
+      "name" : "requestMethod",
+      "value" : "POST"
+    }, {
+      "name" : "baseUrl",
+      "value" : "http://localhost"
+    }, {
+      "name" : "requestEndpoint",
+      "value" : "/api/documents/post_document"
+    }, {
+      "name" : "requestContentString",
+      "value" : "Hello World!"
+    }, {
+      "name" : "requestContentFile",
+      "value" : "HelloWorld.pdf"
+    }, {
+      "name" : "responseStatusCodePattern",
+      "value" : "(2[0-9]{2})"
+    } ]
+  }, {
+    "title" : "5.2 Rest-API GET http://localhost/api/documents",
+    "className" : "CheckHttpRequest",
+    "maxGrade" : 5.0,
+    "withGrading" : true,
+    "parameters" : [ {
+      "name" : "requestMethod",
+      "value" : "GET"
+    }, {
+      "name" : "baseUrl",
+      "value" : "http://localhost"
+    }, {
+      "name" : "requestEndpoint",
+      "value" : "/api/documents"
+    }, {
+      "name" : "responseStatusCodePattern",
+      "value" : "(2[0-9]{2})"
+    } ]
+  }, {
+    "title" : "5.3 Rest-API GET http://localhost/api/documents/1",
+    "className" : "CheckHttpRequest",
+    "maxGrade" : 5.0,
+    "withGrading" : true,
+    "parameters" : [ {
+      "name" : "requestMethod",
+      "value" : "GET"
+    }, {
+      "name" : "baseUrl",
+      "value" : "http://localhost"
+    }, {
+      "name" : "requestEndpoint",
+      "value" : "/api/documents/1"
+    }, {
+      "name" : "responseStatusCodePattern",
+      "value" : "(2[0-9]{2})"
+    } ]
+  }, {
+    "title" : "5.4 Rest-API PUT http://localhost/api/documents/1",
+    "className" : "CheckHttpRequest",
+    "maxGrade" : 5.0,
+    "withGrading" : true,
+    "parameters" : [ {
+      "name" : "requestMethod",
+      "value" : "PUT"
+    }, {
+      "name" : "baseUrl",
+      "value" : "http://localhost"
+    }, {
+      "name" : "requestEndpoint",
+      "value" : "/api/documents/1"
+    }, {
+      "name" : "requestHeader",
+      "value" : "Content-Type: application/json;charset=UTF-8"
+    }, {
+      "name" : "requestContentString",
+      "value" : "{ \"id\" : 1, \"title\" : \"Updated title of document\" }"
+    }, {
+      "name" : "responseStatusCodePattern",
+      "value" : "(2[0-9]{2})"
+    } ]
+  }, {
+    "title" : "5.5 Rest-API DELETE http://localhost/api/documents/1",
+    "className" : "CheckHttpRequest",
+    "maxGrade" : 5.0,
+    "withGrading" : true,
+    "parameters" : [ {
+      "name" : "requestMethod",
+      "value" : "DELETE"
+    }, {
+      "name" : "baseUrl",
+      "value" : "http://localhost"
+    }, {
+      "name" : "requestEndpoint",
+      "value" : "/api/documents/1"
+    }, {
+      "name" : "responseStatusCodePattern",
+      "value" : "(2[0-9]{2})"
+    } ]
+  }, {
+    "title" : "5.6 Web-UI GET http://localhost/",
+    "className" : "CheckHttpRequest",
+    "maxGrade" : 5.0,
+    "withGrading" : true,
+    "parameters" : [ {
+      "name" : "requestMethod",
+      "value" : "GET"
+    }, {
+      "name" : "baseUrl",
+      "value" : "http://localhost"
+    }, {
+      "name" : "requestEndpoint",
+      "value" : "/"
+    }, {
+      "name" : "responseStatusCodePattern",
+      "value" : "(2[0-9]{2})"
+    } ]
+  }, {
+    "title" : "5.7 Web-UI GET http://localhost/documents",
+    "className" : "CheckHttpRequest",
+    "maxGrade" : 5.0,
+    "withGrading" : true,
+    "parameters" : [ {
+      "name" : "requestMethod",
+      "value" : "GET"
+    }, {
+      "name" : "baseUrl",
+      "value" : "http://localhost"
+    }, {
+      "name" : "requestEndpoint",
+      "value" : "/documents"
+    }, {
+      "name" : "responseStatusCodePattern",
+      "value" : "(2[0-9]{2})"
+    } ]
+  }, {
+    "title" : "5.8 Web-UI POST http://localhost/upload",
+    "className" : "CheckHttpRequest",
+    "maxGrade" : 5.0,
+    "withGrading" : true,
+    "parameters" : [ {
+      "name" : "requestMethod",
+      "value" : "POST"
+    }, {
+      "name" : "baseUrl",
+      "value" : "http://localhost"
+    }, {
+      "name" : "requestEndpoint",
+      "value" : "/upload"
+    }, {
+      "name" : "requestContentString",
+      "value" : "Hello World!"
+    }, {
+      "name" : "requestContentFile",
+      "value" : "HelloWorld.pdf"
+    }, {
+      "name" : "responseStatusCodePattern",
+      "value" : "(2[0-9]{2})"
+    } ]
+  }, {
+    "title" : "5.x Component-Tests done (docker compose down)",
+    "className" : "CheckDockerCompose",
+    "maxGrade" : 5.0,
+    "withGrading" : true,
+    "parameters" : [ {
+      "name" : "command",
+      "value" : "down"
+    } ]
+  } ]
+}
