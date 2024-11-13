@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -71,15 +72,37 @@ public class PaperlessApiController implements PaperlessApi {
             @Parameter(name = "document", description = "") @Valid @RequestParam(value = "document", required = false) String document,
             @Parameter(name = "file", description = "") @RequestPart(value = "file", required = false) MultipartFile file
     ) {
+        System.out.println("Received document: " + document);
+        if (file != null) {
+            System.out.println("Received file: " + file.getOriginalFilename());
+        } else {
+            System.out.println("No file received");
+        }
+
         if (document != null && !document.isBlank()) {
-            at.fhtw.swkom.paperless.persistence.entity.Document newDocument = new at.fhtw.swkom.paperless.persistence.entity.Document();
-            newDocument.setTitle(document);
-            // Add other fields as needed and handle `file` if necessary
-            documentService.saveDocument(newDocument);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            try {
+                // Create new document entity
+                at.fhtw.swkom.paperless.persistence.entity.Document newDocument = new at.fhtw.swkom.paperless.persistence.entity.Document();
+                newDocument.setTitle(document);
+
+                if (file != null) {
+                    byte[] fileBytes = file.getBytes();
+                    String originalFileName = file.getOriginalFilename();
+                    System.out.println("File processed: " + originalFileName);
+                }
+
+                // Save the document
+                documentService.saveDocument(newDocument);
+                return new ResponseEntity<>(HttpStatus.CREATED);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+
+
 
     @Override
     public ResponseEntity<Void> updateDocument(
@@ -88,7 +111,7 @@ public class PaperlessApiController implements PaperlessApi {
         Optional<at.fhtw.swkom.paperless.persistence.entity.Document> existingDocument = documentService.getDocumentById(id);
         if (existingDocument.isPresent()) {
             at.fhtw.swkom.paperless.persistence.entity.Document documentToUpdate = existingDocument.get();
-            documentToUpdate.setTitle("Updated Title"); // Example
+            documentToUpdate.setTitle("Updated Title");
             documentService.saveDocument(documentToUpdate);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {

@@ -1,0 +1,1 @@
+curl -X POST -F "document=Example Document" -F "file=@example.txt" http://localhost:8081/api/documents/post_document
