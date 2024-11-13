@@ -63,5 +63,4 @@ public class Document {
         this.created = created;
     }
 
-    // toString, equals, and hashCode methods (if needed)
 }
