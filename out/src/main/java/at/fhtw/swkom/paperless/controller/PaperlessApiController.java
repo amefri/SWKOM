@@ -74,9 +74,11 @@ public class PaperlessApiController implements PaperlessApi {
     }
 
     @Override
-    public ResponseEntity<Void> updateDocument(Integer id) {
-
-        //TODO: Implement
-        return PaperlessApi.super.updateDocument(id);
+    public ResponseEntity<Void> updateDocument(
+            @Parameter(name = "id", description = "The id of the document", required = true, in = ParameterIn.PATH) @PathVariable("id") Integer id
+    ) {
+        // TODO
+        return new ResponseEntity<>(HttpStatus.OK);
     }
+
 }
