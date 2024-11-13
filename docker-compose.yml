@@ -27,7 +27,7 @@ services:
     networks:
       - app-network
 
-  frontend:
+  ui:
     build: ./ui
     container_name: frontend
     ports:
