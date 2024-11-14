@@ -1,4 +1,4 @@
-package at.fhtw.swkom.paperless.service;
+package at.fhtw.swkom.paperless.services;
 
 import at.fhtw.swkom.paperless.persistence.entity.Document;
 import at.fhtw.swkom.paperless.persistence.repository.DocumentRepository;
