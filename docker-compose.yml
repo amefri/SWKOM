@@ -2,7 +2,9 @@ version: '3.8'
 
 services:
   db:
-    image: postgres:latest
+    build: db/
+    container_name: paperless-db
+    restart: always
     environment:
       POSTGRES_USER: paperless
       POSTGRES_PASSWORD: paperless
@@ -11,19 +13,16 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
 
   rest:
     build: ./out
     container_name: rest
-    restart: always
+    restart: no
     ports:
       - "8081:8081"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/paperless
-      SPRING_DATASOURCE_USERNAME: paperless
-      SPRING_DATASOURCE_PASSWORD: paperless
-    depends_on:
-      - db
     networks:
       - app-network
 
