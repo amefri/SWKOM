@@ -2,6 +2,8 @@ package at.fhtw.swkom.paperless.persistence.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "documents")

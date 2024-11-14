@@ -4,16 +4,21 @@ import com.fasterxml.jackson.databind.Module;
 import org.openapitools.jackson.nullable.JsonNullableModule;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.FullyQualifiedAnnotationBeanNameGenerator;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@SpringBootApplication(
+@SpringBootApplication
+/*(
     nameGenerator = FullyQualifiedAnnotationBeanNameGenerator.class
-)
+)*/
+@EnableJpaRepositories("at.fhtw.swkom.paperless.persistence.repository")
+@EntityScan("at.fhtw.swkom.paperless.persistence.entity")
 @ComponentScan(
-    basePackages = {"at.fhtw.swkom.paperless", "at.fhtw.swkom.paperless.controller" , "at.fhtw.swkom.paperless.config"},
+    basePackages = {"at.fhtw.swkom.paperless", "at.fhtw.swkom.paperless.controller" , "at.fhtw.swkom.paperless.config", "at.fhtw.swkom.paperless.persistence"},
     nameGenerator = FullyQualifiedAnnotationBeanNameGenerator.class
 )
 public class OpenApiGeneratorApplication {
