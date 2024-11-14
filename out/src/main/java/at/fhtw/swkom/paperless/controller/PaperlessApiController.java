@@ -1,8 +1,10 @@
 package at.fhtw.swkom.paperless.controller;
 
-import at.fhtw.swkom.paperless.services.dto.Document;
-import at.fhtw.swkom.paperless.service.DocumentService;
-import at.fhtw.swkom.paperless.service.mapper.DocumentMapper;
+
+import at.fhtw.swkom.paperless.persistence.entity.Document;
+import at.fhtw.swkom.paperless.services.DocumentService;
+import at.fhtw.swkom.paperless.services.dto.DocumentDTO;
+import at.fhtw.swkom.paperless.services.mapper.DocumentMapper;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import jakarta.validation.Valid;
@@ -48,23 +50,14 @@ public class PaperlessApiController implements PaperlessApi {
     }
 
     @Override
-    public ResponseEntity<Document> getDocument(
+    public ResponseEntity<DocumentDTO> getDocument(
             @Parameter(name = "id", description = "The id of the document", required = true, in = ParameterIn.PATH) @PathVariable("id") Integer id
     ) {
         Optional<at.fhtw.swkom.paperless.persistence.entity.Document> documentEntity = documentService.getDocumentById(id);
         return documentEntity.map(entity -> {
-            Document dto = documentMapper.toDto(entity); // Convert entity to DTO
+            DocumentDTO dto = documentMapper.toDto(entity); // Convert entity to DTO
             return ResponseEntity.ok(dto);
         }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
-
-    @Override
-    public ResponseEntity<List<Document>> getDocuments() {
-        List<at.fhtw.swkom.paperless.persistence.entity.Document> documentEntities = documentService.getAllDocuments();
-        List<Document> documentDTOs = documentEntities.stream()
-                .map(documentMapper::toDto) // Convert entities to DTOs
-                .collect(Collectors.toList());
-        return new ResponseEntity<>(documentDTOs, HttpStatus.OK);
     }
 
     @Override
