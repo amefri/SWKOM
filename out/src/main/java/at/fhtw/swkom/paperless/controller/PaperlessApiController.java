@@ -93,7 +93,15 @@ public class PaperlessApiController implements PaperlessApi {
         }
     }
 
-
+    @Override
+    public ResponseEntity<List<DocumentDTO>> getDocuments() {
+    return new ResponseEntity<>(
+            documentService.getAllDocuments().stream()
+                    .map(documentMapper::toDto)
+                    .collect(Collectors.toList()),
+            HttpStatus.OK
+    );
+    }
 
 
     @Override

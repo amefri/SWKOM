@@ -131,7 +131,7 @@ public interface PaperlessApi {
         produces = { "application/json" }
     )
     
-    default ResponseEntity<DocumentDTO> getDocuments(
+    default ResponseEntity<List<DocumentDTO>> getDocuments(
         
     ) {
         getRequest().ifPresent(request -> {

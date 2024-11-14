@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 @Table(name = "documents")
@@ -20,6 +21,7 @@ public class Document {
     private String author;
 
     @Column
+    @CreatedDate
     private LocalDateTime created;
 
     // Constructors
