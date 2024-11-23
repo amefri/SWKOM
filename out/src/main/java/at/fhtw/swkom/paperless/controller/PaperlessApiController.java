@@ -1,6 +1,7 @@
 package at.fhtw.swkom.paperless.controller;
 
 import at.fhtw.swkom.paperless.config.rabbitmq.RabbitMQProducer;
+import at.fhtw.swkom.paperless.persistence.entity.RabbitMessage;
 import at.fhtw.swkom.paperless.services.DocumentService;
 import at.fhtw.swkom.paperless.services.dto.DocumentDTO;
 import at.fhtw.swkom.paperless.services.mapper.DocumentMapper;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
@@ -126,26 +126,4 @@ public class PaperlessApiController implements PaperlessApi {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-    }
-
-    // Inner class for RabbitMQ message format
-    public static class RabbitMessage {
-        private final String fileContent;
-        private String title;
-        private String fileName;
-
-        public RabbitMessage(String title, String fileName, String fileContent) {
-            this.title = title;
-            this.fileName = fileName;
-            this.fileContent = fileContent;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public String getFileName() {
-            return fileName;
-        }
-    }
-}
+    }}
