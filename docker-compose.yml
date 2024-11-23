@@ -16,15 +16,22 @@ services:
     networks:
       - app-network
 
-
   rest:
     build: ./out
     container_name: rest
     restart: no
     ports:
       - "8081:8081"
+    depends_on:
+      - db
+      - rabbitmq
     networks:
       - app-network
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: user
+      RABBITMQ_PASSWORD: password
 
   ui:
     build: ./ui
@@ -33,6 +40,19 @@ services:
       - "80:80"
     depends_on:
       - rest
+    networks:
+      - app-network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"   # RabbitMQ message broker port
+      - "15672:15672" # RabbitMQ management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
     networks:
       - app-network
 

@@ -1,8 +1,10 @@
 package at.fhtw.swkom.paperless.controller;
 
+import at.fhtw.swkom.paperless.config.rabbitmq.RabbitMQProducer;
 import at.fhtw.swkom.paperless.services.DocumentService;
 import at.fhtw.swkom.paperless.services.dto.DocumentDTO;
 import at.fhtw.swkom.paperless.services.mapper.DocumentMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import jakarta.validation.Valid;
@@ -16,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,11 +31,15 @@ public class PaperlessApiController implements PaperlessApi {
 
     private final DocumentService documentService;
     private final DocumentMapper documentMapper;
+    private final RabbitMQProducer rabbitMQProducer;
 
     @Autowired
-    public PaperlessApiController(DocumentService documentService, DocumentMapper documentMapper) {
+    public PaperlessApiController(DocumentService documentService,
+                                  DocumentMapper documentMapper,
+                                  RabbitMQProducer rabbitMQProducer) {
         this.documentService = documentService;
         this.documentMapper = documentMapper;
+        this.rabbitMQProducer = rabbitMQProducer;
     }
 
     @Override
@@ -65,21 +73,24 @@ public class PaperlessApiController implements PaperlessApi {
     ) {
         try {
             if ((document != null && !document.isBlank()) || file != null) {
-                // Create new document entity
-                at.fhtw.swkom.paperless.persistence.entity.Document newDocument = new at.fhtw.swkom.paperless.persistence.entity.Document();
-                if (document != null) {
-                    newDocument.setTitle(document);
-                }
+                // Prepare metadata
+                String fileName = null;
+                String fileContent = null;
 
                 if (file != null && !file.isEmpty()) {
-                    byte[] fileBytes = file.getBytes();
-                    String originalFileName = file.getOriginalFilename();
-                    // You can add logic to process/store the file here
-                    System.out.println("File processed: " + originalFileName);
+                    fileName = file.getOriginalFilename();
+                    fileContent = Base64.getEncoder().encodeToString(file.getBytes());
                 }
 
-                // Save the document
-                documentService.saveDocument(newDocument);
+                // Create RabbitMQ message
+                RabbitMessage rabbitMessage = new RabbitMessage(document, fileName, fileContent);
+                ObjectMapper objectMapper = new ObjectMapper();
+                String jsonMessage = objectMapper.writeValueAsString(rabbitMessage);
+
+                // Send the message to RabbitMQ
+                rabbitMQProducer.sendMessage(jsonMessage);
+
+                System.out.println("File and metadata sent to RabbitMQ: " + fileName);
                 return new ResponseEntity<>(HttpStatus.CREATED);
             }
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -87,7 +98,6 @@ public class PaperlessApiController implements PaperlessApi {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
-            // Handle unexpected errors
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -95,14 +105,13 @@ public class PaperlessApiController implements PaperlessApi {
 
     @Override
     public ResponseEntity<List<DocumentDTO>> getDocuments() {
-    return new ResponseEntity<>(
-            documentService.getAllDocuments().stream()
-                    .map(documentMapper::toDto)
-                    .collect(Collectors.toList()),
-            HttpStatus.OK
-    );
+        return new ResponseEntity<>(
+                documentService.getAllDocuments().stream()
+                        .map(documentMapper::toDto)
+                        .collect(Collectors.toList()),
+                HttpStatus.OK
+        );
     }
-
 
     @Override
     public ResponseEntity<Void> updateDocument(
@@ -116,6 +125,27 @@ public class PaperlessApiController implements PaperlessApi {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    // Inner class for RabbitMQ message format
+    public static class RabbitMessage {
+        private final String fileContent;
+        private String title;
+        private String fileName;
+
+        public RabbitMessage(String title, String fileName, String fileContent) {
+            this.title = title;
+            this.fileName = fileName;
+            this.fileContent = fileContent;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public String getFileName() {
+            return fileName;
         }
     }
 }
