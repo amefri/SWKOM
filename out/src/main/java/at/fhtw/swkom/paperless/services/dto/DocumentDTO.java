@@ -4,6 +4,7 @@ public class DocumentDTO {
 
     private Integer id;
     private String title;
+    private String filename;
     private String author;
     private String created;
 
@@ -38,5 +39,12 @@ public class DocumentDTO {
 
     public void setCreated(String created) {
         this.created = created;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 }

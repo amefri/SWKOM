@@ -29,8 +29,8 @@ public class DocumentService {
     }
 
     // Save or update a document
-    public Document saveDocument(Document document) {
-        return documentRepository.save(document);
+    public void saveDocument(Document document) {
+        documentRepository.save(document);
     }
 
     // Delete a document by id

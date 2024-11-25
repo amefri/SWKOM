@@ -66,42 +66,66 @@ public class PaperlessApiController implements PaperlessApi {
         }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+
     @Override
     public ResponseEntity<Void> postDocument(
-            @Parameter(name = "document", description = "") @Valid @RequestParam(value = "document", required = false) String document,
-            @Parameter(name = "file", description = "") @RequestPart(value = "file", required = false) MultipartFile file
+            @RequestParam(value = "document", required = false) String document,
+            @RequestPart(value = "file", required = false) MultipartFile file
     ) {
         try {
-            if ((document != null && !document.isBlank()) || file != null) {
-                // Prepare metadata
-                String fileName = null;
-                String fileContent = null;
+            boolean isDocumentProvided = document != null && !document.isBlank();
+            boolean isFileProvided = file != null && !file.isEmpty();
 
-                if (file != null && !file.isEmpty()) {
-                    fileName = file.getOriginalFilename();
-                    fileContent = Base64.getEncoder().encodeToString(file.getBytes());
+            if (!isDocumentProvided && !isFileProvided) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // No valid input
+            }
+
+            // If file is provided, process it
+            if (isFileProvided) {
+                String fileName = file.getOriginalFilename();
+                byte[] fileBytes = file.getBytes();
+                String fileContent = Base64.getEncoder().encodeToString(fileBytes); // Encode file as Base64
+                System.out.println("File processed: " + fileName);
+
+                // Send to RabbitMQ
+                if (isDocumentProvided) {
+                    RabbitMessage rabbitMessage = new RabbitMessage(document, fileName, fileContent);
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    String jsonMessage = objectMapper.writeValueAsString(rabbitMessage);
+                    System.out.println("Sending RabbitMQ message: " + jsonMessage); // Debug log
+                    rabbitMQProducer.sendMessage(jsonMessage);
+                }
+            }
+
+            // If document text is provided, save it as a document entity
+            if (isDocumentProvided) {
+                at.fhtw.swkom.paperless.persistence.entity.Document newDocument = new at.fhtw.swkom.paperless.persistence.entity.Document();
+                newDocument.setTitle(document);
+
+                // Optionally save file-related information if file is provided
+                if (isFileProvided) {
+                    // Add any necessary file metadata to the document entity
                 }
 
-                // Create RabbitMQ message
-                RabbitMessage rabbitMessage = new RabbitMessage(document, fileName, fileContent);
-                ObjectMapper objectMapper = new ObjectMapper();
-                String jsonMessage = objectMapper.writeValueAsString(rabbitMessage);
-
-                // Send the message to RabbitMQ
-                rabbitMQProducer.sendMessage(jsonMessage);
-
-                System.out.println("File and metadata sent to RabbitMQ: " + fileName);
-                return new ResponseEntity<>(HttpStatus.CREATED);
+                documentService.saveDocument(newDocument);
             }
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+            return new ResponseEntity<>(HttpStatus.CREATED); // Success
         } catch (IOException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
+            // Handle unexpected errors
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
+
+
+
+
 
     @Override
     public ResponseEntity<List<DocumentDTO>> getDocuments() {
