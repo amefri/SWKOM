@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
@@ -101,7 +102,7 @@ public class PaperlessApiController implements PaperlessApi {
             if (isDocumentProvided) {
                 at.fhtw.swkom.paperless.persistence.entity.Document newDocument = new at.fhtw.swkom.paperless.persistence.entity.Document();
                 newDocument.setTitle(document);
-
+                newDocument.setCreated(LocalDateTime.now());
                 // Optionally save file-related information if file is provided
                 if (isFileProvided) {
                     // Add any necessary file metadata to the document entity
