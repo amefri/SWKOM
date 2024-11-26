@@ -5,9 +5,11 @@ import java.time.LocalDateTime;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "documents")
+@EntityListeners(AuditingEntityListener.class)
 public class Document {
 
     @Id
@@ -20,7 +22,7 @@ public class Document {
     @Column
     private String author;
 
-    @Column
+    @Column(updatable = false)
     @CreatedDate
     private LocalDateTime created;
 
