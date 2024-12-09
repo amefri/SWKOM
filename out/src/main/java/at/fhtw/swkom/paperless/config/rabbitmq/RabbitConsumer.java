@@ -6,7 +6,6 @@ import at.fhtw.swkom.paperless.services.DocumentService;
 import at.fhtw.swkom.paperless.services.MinioService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayInputStream;
@@ -15,20 +14,16 @@ import java.util.Base64;
 @Component
 public class RabbitConsumer {
 
-    @Autowired
-    private MinioService minioService;
+    private final MinioService minioService;
+    private final DocumentService documentService;
 
-    @Autowired
-    private DocumentService documentService;
-
-    private static final String QUEUE_NAME = "ocr_queue";
-
-    @RabbitListener(queues = QUEUE_NAME)
-    public void listen(String message) {
-        processMessage(message);
+    public RabbitConsumer(MinioService minioService, DocumentService documentService) {
+        this.minioService = minioService;
+        this.documentService = documentService;
     }
 
-    private void processMessage(String message) {
+    @RabbitListener(queues = "ocr_queue")
+    public void listen(String message) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             RabbitMessage rabbitMessage = objectMapper.readValue(message, RabbitMessage.class);
