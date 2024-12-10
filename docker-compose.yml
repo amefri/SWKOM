@@ -71,6 +71,25 @@ services:
         networks:
           - app-network
 
+  workers:
+    build:
+      context: C:/Users/Patricia/Desktop/SWKOM/SWKOM
+      dockerfile: workers/Dockerfile
+    container_name: workers
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: user
+      RABBITMQ_PASSWORD: password
+    depends_on:
+      - rabbitmq
+    networks:
+      - app-network
+
+
+
+
+
 volumes:
   postgres_data:
   minio_data: # Persistent storage volume for MinIO
