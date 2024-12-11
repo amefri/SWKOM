@@ -7,7 +7,7 @@ public class RabbitMQConnectionFactory {
 
     private static Connection connection;
 
-    public static Connection getConnection() throws Exception {
+    public static Connection getConnection() throws Exception { //Local files debugger
         if (connection == null || !connection.isOpen()) {
             ConnectionFactory factory = new ConnectionFactory();
             factory.setHost(System.getenv("RABBITMQ_HOST"));  // Host: "rabbitmq" from docker-compose
