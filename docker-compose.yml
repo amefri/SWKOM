@@ -73,7 +73,6 @@ services:
 
   workers:
     build:
-      context: C:/Users/Patricia/Desktop/SWKOM/SWKOM
       dockerfile: workers/Dockerfile
     container_name: workers
     environment:
@@ -85,9 +84,6 @@ services:
       - rabbitmq
     networks:
       - app-network
-
-
-
 
 
 volumes:
