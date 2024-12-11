@@ -48,6 +48,7 @@ public class PaperlessApiController implements PaperlessApi {
             @Parameter(name = "id", description = "The id of the document", required = true, in = ParameterIn.PATH) @PathVariable("id") Integer id
     ) {
         Optional<at.fhtw.swkom.paperless.persistence.entity.Document> documentEntity = documentService.getDocumentById(id);
+
         if (documentEntity.isPresent()) {
             documentService.deleteDocumentById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -55,6 +56,7 @@ public class PaperlessApiController implements PaperlessApi {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
 
     @Override
     public ResponseEntity<DocumentDTO> getDocument(

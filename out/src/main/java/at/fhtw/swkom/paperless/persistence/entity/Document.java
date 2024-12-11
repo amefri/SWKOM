@@ -2,8 +2,6 @@ package at.fhtw.swkom.paperless.persistence.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -22,6 +20,9 @@ public class Document {
     @Column
     private String author;
 
+    @Column
+    private String content; // Field to store OCR-extracted text
+
     @Column(updatable = false)
     @CreatedDate
     private LocalDateTime created;
@@ -30,9 +31,10 @@ public class Document {
     public Document() {
     }
 
-    public Document(String title, String author, LocalDateTime created) {
+    public Document(String title, String author, String content, LocalDateTime created) {
         this.title = title;
         this.author = author;
+        this.content = content;
         this.created = created;
     }
 
@@ -61,6 +63,14 @@ public class Document {
         this.author = author;
     }
 
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     public LocalDateTime getCreated() {
         return created;
     }
@@ -68,5 +78,4 @@ public class Document {
     public void setCreated(LocalDateTime created) {
         this.created = created;
     }
-
 }
