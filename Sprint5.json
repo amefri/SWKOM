@@ -1,0 +1,251 @@
+{
+  "courseName" : "BIF5-SWKOM-WS24_L2L3",
+  "assignmentName" : "Sprint5",
+  "tasks" : [ {
+    "title" : "1.1 Provided Submission / Git Repo",
+    "className" : "CheckRepoUrlValid",
+    "maxGrade" : 2.0,
+    "withGrading" : true,
+    "parameters" : [ ]
+  }, {
+    "title" : "1.2 Extracted ZIP / Git clone",
+    "className" : "CheckRepoClone",
+    "maxGrade" : 3.0,
+    "withGrading" : true,
+    "parameters" : [ {
+      "name" : "overwriteExisting",
+      "value" : true
+    } ]
+  }, {
+    "title" : "2. Application Build ok (without tests)",
+    "className" : "CheckMavenBuild",
+    "maxGrade" : 15.0,
+    "withGrading" : true,
+    "parameters" : [ {
+      "name" : "skipTests",
+      "value" : true
+    }, {
+      "name" : "rebuildExisting",
+      "value" : false
+    } ]
+  }, {
+    "title" : "3.1 Static File Checks: docker-compose.yml",
+    "className" : "CheckSourceFiles",
+    "maxGrade" : 10.0,
+    "withGrading" : true,
+    "parameters" : [ {
+      "name" : "setRootPath",
+      "value" : "/"
+    }, {
+      "name" : "selectFile",
+      "value" : "docker-compose.yml"
+    }, {
+      "name" : "containsText",
+      "value" : "minio"
+    }, {
+      "name" : "containsText",
+      "value" : "9000"
+    }, {
+      "name" : "containsText",
+      "value" : "9090"
+    }, {
+      "name" : "containsText",
+      "value" : "workers:"
+    } ]
+  }, {
+    "title" : "3.2 Static File Checks: Workers Dockerfile",
+    "className" : "CheckSourceFiles",
+    "maxGrade" : 10.0,
+    "withGrading" : true,
+    "parameters" : [ {
+      "name" : "setRootPath",
+      "value" : "/"
+    }, {
+      "name" : "selectFile",
+      "value" : "workers/Dockerfile"
+    }, {
+      "name" : "containsText",
+      "value" : "FROM maven"
+    }, {
+      "name" : "containsText",
+      "value" : "FROM openjdk"
+    }, {
+      "name" : "containsText",
+      "value" : "tesseract-ocr"
+    }, {
+      "name" : "containsText",
+      "value" : "tessdata"
+    } ]
+  }, {
+    "title" : "3.3 Static File Checks: pom.xml",
+    "className" : "CheckSourceFiles",
+    "maxGrade" : 6.0,
+    "withGrading" : true,
+    "parameters" : [ {
+      "name" : "setRootPath",
+      "value" : "/workers"
+    }, {
+      "name" : "selectFile",
+      "value" : "pom.xml"
+    }, {
+      "name" : "containsText",
+      "value" : "<artifactId>minio</artifactId>"
+    }, {
+      "name" : "containsText",
+      "value" : "amqp"
+    }, {
+      "name" : "containsText",
+      "value" : "<artifactId>tess4j</artifactId>"
+    } ]
+  }, {
+    "title" : "3.4 Static Sourcecode Checks",
+    "className" : "CheckSourceFiles",
+    "maxGrade" : 14.0,
+    "withGrading" : true,
+    "parameters" : [ {
+      "name" : "setRootPath",
+      "value" : "/workers/src/main/java"
+    }, {
+      "name" : "selectFile",
+      "value" : "MinIOConfig.java"
+    }, {
+      "name" : "containsText",
+      "value" : "MinioClient"
+    }, {
+      "name" : "selectFile",
+      "value" : "TesseractOCRConfig.java"
+    }, {
+      "name" : "containsText",
+      "value" : "Tesseract "
+    }, {
+      "name" : "containsText",
+      "value" : ".setDatapath("
+    }, {
+      "name" : "containsText",
+      "value" : ".setLanguage("
+    }, {
+      "name" : "selectFileContainsText",
+      "value" : "interface StorageService"
+    }, {
+      "name" : "selectFileContainsText",
+      "value" : "implements StorageService"
+    }, {
+      "name" : "containsText",
+      "value" : "MinIOConfig"
+    }, {
+      "name" : "containsText",
+      "value" : ".bucket("
+    }, {
+      "name" : "selectFileContainsText",
+      "value" : "interface OcrService"
+    }, {
+      "name" : "selectFileContainsText",
+      "value" : "implements OcrService"
+    }, {
+      "name" : "containsText",
+      "value" : "TesseractOCRConfig"
+    }, {
+      "name" : "containsText",
+      "value" : ".doOCR("
+    } ]
+  }, {
+    "title" : "4. Application Tests ok (Spring Boot Context)",
+    "className" : "CheckMavenBuild",
+    "maxGrade" : 10.0,
+    "withGrading" : true,
+    "parameters" : [ {
+      "name" : "skipTests",
+      "value" : false
+    }, {
+      "name" : "rebuildExisting",
+      "value" : false
+    } ]
+  }, {
+    "title" : "5. Component-Tests (docker compose up)",
+    "className" : "CheckDockerCompose",
+    "maxGrade" : 5.0,
+    "withGrading" : true,
+    "parameters" : [ {
+      "name" : "command",
+      "value" : "up"
+    }, {
+      "name" : "param",
+      "value" : "-d"
+    } ]
+  }, {
+    "title" : "5. Wait 120s for all containers to start",
+    "className" : "CheckWait",
+    "maxGrade" : 0.0,
+    "withGrading" : true,
+    "parameters" : [ {
+      "name" : "waitSeconds",
+      "value" : 120
+    } ]
+  }, {
+    "title" : "5.1 Rest-API POST http://localhost/api/documents/post_document",
+    "className" : "CheckHttpRequest",
+    "maxGrade" : 10.0,
+    "withGrading" : true,
+    "parameters" : [ {
+      "name" : "requestMethod",
+      "value" : "POST"
+    }, {
+      "name" : "baseUrl",
+      "value" : "http://localhost"
+    }, {
+      "name" : "requestEndpoint",
+      "value" : "/api/documents/post_document"
+    }, {
+      "name" : "requestContentString",
+      "value" : "Sprint5Document"
+    }, {
+      "name" : "requestContentFile",
+      "value" : "HelloWorld.pdf"
+    }, {
+      "name" : "responseStatusCodePattern",
+      "value" : "(2[0-9]{2})"
+    } ]
+  }, {
+    "title" : "5.2 WebSite GET http://localhost/",
+    "className" : "CheckHttpRequest",
+    "maxGrade" : 10.0,
+    "withGrading" : true,
+    "parameters" : [ {
+      "name" : "requestMethod",
+      "value" : "GET"
+    }, {
+      "name" : "baseUrl",
+      "value" : "http://localhost"
+    }, {
+      "name" : "requestEndpoint",
+      "value" : ""
+    }, {
+      "name" : "responseStatusCodePattern",
+      "value" : "(2[0-9]{2})"
+    } ]
+  }, {
+    "title" : "5.3 Database SELECT * FROM documents WHERE title='Sprint5Document'",
+    "className" : "CheckDatabase",
+    "maxGrade" : 5.0,
+    "withGrading" : true,
+    "parameters" : [ {
+      "name" : "connect",
+      "value" : "jdbc:postgresql://localhost:5432/paperlessdb?user=postgres&password=postgres"
+    }, {
+      "name" : "executeQuery",
+      "value" : "SELECT * FROM document WHERE title='Sprint5Document'"
+    }, {
+      "name" : "hasRows",
+      "value" : true
+    } ]
+  }, {
+    "title" : "5.x Component-Tests done (docker compose down)",
+    "className" : "CheckDockerCompose",
+    "maxGrade" : 0.0,
+    "withGrading" : true,
+    "parameters" : [ {
+      "name" : "command",
+      "value" : "down"
+    } ]
+  } ]
+}
