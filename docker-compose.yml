@@ -6,9 +6,9 @@ services:
     container_name: paperless-db
     restart: always
     environment:
-      POSTGRES_USER: paperless
-      POSTGRES_PASSWORD: paperless
-      POSTGRES_DB: paperless
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: paperlessdb
     ports:
       - "5432:5432"
     volumes:
@@ -28,6 +28,11 @@ services:
     networks:
       - app-network
     environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/paperlessdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_DATASOURCE_DRIVERCLASSNAME: org.postgresql.Driver
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
       RABBITMQ_HOST: rabbitmq
       RABBITMQ_PORT: 5672
       RABBITMQ_USER: user
@@ -38,6 +43,7 @@ services:
     container_name: frontend
     ports:
       - "80:80"
+      - "9090:9090"
     depends_on:
       - rest
     networks:

@@ -6,7 +6,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name = "documents")
+@Table(name = "document")
 @EntityListeners(AuditingEntityListener.class)
 public class Document {
 
