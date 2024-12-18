@@ -79,6 +79,10 @@ services:
 
   workers:
     build:
+<<<<<<< HEAD
+=======
+      context: ./
+>>>>>>> Sprint5
       dockerfile: workers/Dockerfile
     container_name: workers
     environment:
