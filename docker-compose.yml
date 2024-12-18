@@ -79,7 +79,7 @@ services:
 
   workers:
     build:
-      context: C:/Users/Patricia/Desktop/SWKOM/SWKOM
+      context: ./
       dockerfile: workers/Dockerfile
     container_name: workers
     environment:
