@@ -24,8 +24,8 @@ public class OcrService {
             throw new RuntimeException("Failed to process document with OCR", e);
         }
     }
-    public static File streamToFile(InputStream in, String filename) throws Exception {
-        File tempFile = File.createTempFile(filename, ".pdf"); // or the actual file type
+    public static File streamToFile(InputStream in, String filename, String fileExtension) throws Exception {
+        File tempFile = File.createTempFile(filename, fileExtension);
         try (FileOutputStream out = new FileOutputStream(tempFile)) {
             byte[] buffer = new byte[1024];
             int bytesRead;

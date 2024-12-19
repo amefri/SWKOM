@@ -5,6 +5,10 @@ public class RabbitMessage {
     private String fileName;
     private String fileContent; // Base64-encoded file content
 
+
+    // No-argument constructor
+    public RabbitMessage() {
+    }
     public RabbitMessage(String title, String fileName, String fileContent) {
         this.title = title;
         this.fileName = fileName;

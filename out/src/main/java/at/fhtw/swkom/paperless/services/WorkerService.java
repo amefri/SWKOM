@@ -1,9 +1,10 @@
 package at.fhtw.swkom.paperless.services;
 
 import at.fhtw.swkom.paperless.persistence.entity.Document;
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.InputStream;
 
 @Service
@@ -20,26 +21,60 @@ public class WorkerService {
         this.documentService = documentService;
     }
 
-    public void processDocument(String filePath, String language, String documentTitle) {
-        try {
-            // Fetch file from MinIO
-            InputStream fileStream = minioService.downloadFile(filePath);
+    public void processAndUploadDocument(String filePath, String language, String documentTitle, String fileExtension) {
+        try (InputStream fileStream = minioService.downloadFile(filePath)) {
 
-            // Perform OCR processing
-            String extractedText = ocrService.processDocument(OcrService.streamToFile(fileStream, "tempFile"), language);
-            System.out.println("Extracted Text: " + extractedText);
+            // Step 2: Convert InputStream to a File
+            File tempFile = OcrService.streamToFile(fileStream, "tempFile", fileExtension);
 
-            // Save extracted text to database
-            Document document = new Document();
-            document.setTitle(documentTitle);
-            document.setContent(extractedText);
-            documentService.saveDocument(document);
+            // Step 3: Optional OCR Processing
+            String extractedText = null;
+            if (isOcrSupported(fileExtension)) {
+                extractedText = ocrService.processDocument(tempFile, language);
+                System.out.println("Extracted Text: " + extractedText);
 
-            System.out.println("Document processed and saved: " + documentTitle);
+                // Save the OCR result to the database
+                Document document = new Document();
+                document.setTitle(documentTitle);
+                document.setContent(extractedText);
+                documentService.saveDocument(document);
+                System.out.println("Document saved in the database: " + documentTitle);
+            }
+
+            // Step 4: Reset stream if needed or recreate it
+            InputStream uploadStream = minioService.downloadFile(filePath);
+            String uploadedFileName = "uploaded_" + documentTitle + fileExtension;
+
+            String contentType = getContentType(fileExtension);
+            minioService.uploadFile(uploadedFileName, uploadStream, uploadStream.available(), contentType);
+            System.out.println("File uploaded to MinIO: " + uploadedFileName);
 
         } catch (Exception e) {
-            System.err.println("Error processing document: " + e.getMessage());
+            System.err.println("Error processing and uploading document: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    private String getContentType(String fileExtension) {
+        switch (fileExtension.toLowerCase()) {
+            case ".jpg":
+            case ".jpeg":
+                return "image/jpeg";
+            case ".png":
+                return "image/png";
+            case ".tif":
+            case ".tiff":
+                return "image/tiff";
+            case ".pdf":
+                return "application/pdf";
+            default:
+                return "application/octet-stream";
+        }
+    }
+
+
+    private boolean isOcrSupported(String fileExtension) {
+        // Check if OCR is supported for the given file type
+        return fileExtension.equalsIgnoreCase(".jpg") || fileExtension.equalsIgnoreCase(".jpeg") || fileExtension.equalsIgnoreCase(".png") || fileExtension.equalsIgnoreCase(".tif") || fileExtension.equalsIgnoreCase(".tiff") || fileExtension.equalsIgnoreCase(".pdf");
     }
 }
