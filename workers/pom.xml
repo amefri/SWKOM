@@ -130,7 +130,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>org.swkom.workers.WorkersApplication</mainClass>
+                    <mainClass>at.fhtw.swkom.paperless.workers.WorkersApplication</mainClass>
                 </configuration>
             </plugin>
 
