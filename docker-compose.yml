@@ -108,6 +108,16 @@ services:
       - rabbitmq
     networks:
       - app-network
+      - 
+  adminer:
+    image: docker.io/library/adminer
+    depends_on:
+      - postgres-db
+    ports:
+      - "9091:8080"
+    networks:
+      - paperless-network
+
 
 volumes:
   postgres_data:

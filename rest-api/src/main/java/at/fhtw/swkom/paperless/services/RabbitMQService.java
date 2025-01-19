@@ -38,7 +38,7 @@ public class RabbitMQService {
 
 
 
-    @RabbitListener(queues = "${rabbitmq.ocrWorkerOutputQueue}")
+    @RabbitListener(queues = "${rabbitmq.fromOcrWorker}")
     public void receiveFilename(String content, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) {
         final OCRMessage ocrMessage;
         try {
