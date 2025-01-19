@@ -112,7 +112,7 @@ services:
   adminer:
     image: docker.io/library/adminer
     depends_on:
-      - postgres-db
+      - db
     ports:
       - "9091:8080"
     networks:
