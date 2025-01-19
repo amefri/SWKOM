@@ -179,4 +179,7 @@ Student-results.json
 submissions.json
 Sprint5.json
 
+.direnv
+.devenv
+
 # End of https://www.toptal.com/developers/gitignore/api/java,windows,intellij,maven

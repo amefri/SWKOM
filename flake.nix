@@ -68,6 +68,7 @@
                     leiningen
                     tesseract
                     rabbitmq-server
+                    poppler_utils
                   ];
 
                   enterShell = ''
