@@ -116,7 +116,7 @@ services:
     ports:
       - "9091:8080"
     networks:
-      - paperless-network
+      - app-network
 
 
 volumes:
