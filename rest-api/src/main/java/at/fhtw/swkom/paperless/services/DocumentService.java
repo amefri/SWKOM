@@ -2,23 +2,40 @@ package at.fhtw.swkom.paperless.services;
 
 import at.fhtw.swkom.paperless.persistence.entity.Document;
 import at.fhtw.swkom.paperless.persistence.repository.DocumentRepository;
+import at.fhtw.swkom.paperless.services.dto.DocumentDTO;
+import at.fhtw.swkom.paperless.services.mapper.DocumentMapper;
+import io.minio.MinioClient;
+import io.minio.errors.*;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@Log
 @Service
 public class DocumentService {
 
     private final DocumentRepository documentRepository;
     private final OcrService ocrService;
+    private final MinioService minioService;
+    private final RabbitMQService rabbitMQService;
+    private final DocumentMapper mapper;
 
     @Autowired
-    public DocumentService(DocumentRepository documentRepository, OcrService ocrService) {
+    public DocumentService(DocumentRepository documentRepository, OcrService ocrService, MinioService minioService, RabbitMQService rabbitMQService, DocumentMapper mapper) {
         this.documentRepository = documentRepository;
         this.ocrService = ocrService;
+        this.minioService = minioService;
+        this.rabbitMQService = rabbitMQService;
+        this.mapper = mapper;
     }
 
     // Retrieve a document by id
@@ -58,5 +75,26 @@ public class DocumentService {
         } catch (Exception e) {
             throw new RuntimeException("Failed to process and save the document", e);
         }
+    }
+
+    public Optional<DocumentDTO> create(String document, MultipartFile file) {
+        final String fileNameBucket;
+        try {
+            fileNameBucket = minioService.uploadFile(file.getOriginalFilename(), file.getInputStream(), "application/pdf");
+            rabbitMQService.sendToOCRWorker(fileNameBucket);
+        } catch (IOException | ServerException | InsufficientDataException | ErrorResponseException |
+                 NoSuchAlgorithmException | InvalidKeyException | InvalidResponseException | XmlParserException |
+                 InternalException e) {
+            log.severe(e.getMessage());
+            log.severe("Failed to upload document to minio");
+            return Optional.empty();
+        } catch (Exception e) {
+            log.severe(e.getMessage());
+            return Optional.empty();
+        }
+        final Document toBeSaved = new Document(null, document, document, LocalDateTime.now().toString(), null, fileNameBucket);
+        documentRepository.save(toBeSaved);
+        final Optional<Document> model = documentRepository.findById(toBeSaved.getId());
+        return model.map(mapper::toDto);
     }
 }

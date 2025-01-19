@@ -4,11 +4,14 @@ import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.GetObjectArgs;
 import io.minio.errors.MinioException;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
+import java.util.UUID;
 
+@Log
 @Service
 public class MinioService {
 
@@ -26,19 +29,22 @@ public class MinioService {
                 .build();
     }
 
-    public void uploadFile(String fileName, InputStream inputStream, long size, String contentType) throws Exception {
+    public String uploadFile(String fileName, InputStream inputStream, String contentType) throws Exception {
+        final int tenMB = 10 * 1024 * 1024;
+        final String minioFilename = UUID.randomUUID() + "-" + fileName;
         try {
             minioClient.putObject(PutObjectArgs.builder()
                     .bucket(bucketName)
-                    .object(fileName)
-                    .stream(inputStream, size, -1)
+                    .object(minioFilename)
+                    .stream(inputStream, -1, tenMB)
                     .contentType(contentType)
                     .build());
-            System.out.println("File uploaded successfully: " + fileName);
+            log.info("File uploaded successfully: " + fileName);
         } catch (MinioException e) {
-            System.err.println("Error occurred while uploading file to MinIO: " + e.getMessage());
+            log.info("Error occurred while uploading file to MinIO: " + e.getMessage());
             throw e;
         }
+        return minioFilename;
     }
 
     public InputStream downloadFile(String fileName) throws Exception {

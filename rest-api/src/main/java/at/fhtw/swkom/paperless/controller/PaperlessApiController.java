@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import jakarta.validation.Valid;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Log
 @Controller
 @RequestMapping("${openapi.paperlessRESTServer.base-path:}")
 public class PaperlessApiController implements PaperlessApi {
@@ -78,67 +80,25 @@ public class PaperlessApiController implements PaperlessApi {
             @RequestParam(value = "document", required = false) String document,
             @RequestPart(value = "file", required = false) MultipartFile file
     ) {
-        try {
             boolean isDocumentProvided = document != null && !document.isBlank();
             boolean isFileProvided = file != null && !file.isEmpty();
 
             if (!isDocumentProvided && !isFileProvided) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // No valid input
             }
-
-            // If file is provided, process it
-            if (isFileProvided) {
-                String fileName = file.getOriginalFilename();
-                byte[] fileBytes = file.getBytes();
-                String fileContent = Base64.getEncoder().encodeToString(fileBytes); // Encode file as Base64
-                System.out.println("File processed: " + fileName);
-
-                // Send to RabbitMQ
-                if (isDocumentProvided) {
-                    RabbitMessage rabbitMessage = new RabbitMessage(document, fileName, fileContent);
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    String jsonMessage = objectMapper.writeValueAsString(rabbitMessage);
-                    System.out.println("Sending RabbitMQ message: " + jsonMessage); // Debug log
-                    rabbitMQProducer.sendMessage(jsonMessage);
-                }
+            final Optional<DocumentDTO> saved = documentService.create(document, file);
+            if(saved.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
-
-            // If document text is provided, save it as a document entity
-            if (isDocumentProvided) {
-                at.fhtw.swkom.paperless.persistence.entity.Document newDocument = new at.fhtw.swkom.paperless.persistence.entity.Document();
-                newDocument.setTitle(document);
-                newDocument.setCreated(LocalDateTime.now());
-                // Optionally save file-related information if file is provided
-                if (isFileProvided) {
-                    // Add any necessary file metadata to the document entity
-                }
-
-                documentService.saveDocument(newDocument);
-            }
-
             return new ResponseEntity<>(HttpStatus.CREATED); // Success
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (Exception e) {
-            // Handle unexpected errors
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
-
-
-
-
-
-
 
     @Override
     public ResponseEntity<List<DocumentDTO>> getDocuments() {
         return new ResponseEntity<>(
                 documentService.getAllDocuments().stream()
                         .map(documentMapper::toDto)
-                        .collect(Collectors.toList()),
+                        .toList(),
                 HttpStatus.OK
         );
     }
