@@ -92,7 +92,7 @@ public class DocumentService {
             log.severe(e.getMessage());
             return Optional.empty();
         }
-        final Document toBeSaved = new Document(null, document, document, LocalDateTime.now().toString(), null, fileNameBucket);
+        final Document toBeSaved = new Document(null, document, document, null, LocalDateTime.now(), fileNameBucket);
         documentRepository.save(toBeSaved);
         final Optional<Document> model = documentRepository.findById(toBeSaved.getId());
         return model.map(mapper::toDto);

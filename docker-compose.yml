@@ -33,7 +33,7 @@ services:
     networks:
       - app-network
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/paperlessdb
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgres
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
       SPRING_DATASOURCE_DRIVERCLASSNAME: org.postgresql.Driver
@@ -54,7 +54,7 @@ services:
     restart: unless-stopped
     ports:
       - "8080:80"
-      - "9090:9090"
+
     depends_on:
       - rest
     networks:
@@ -103,7 +103,7 @@ services:
       RABBITMQ_PORT: 5672
       RABBITMQ_USER: user
       RABBITMQ_PASSWORD: password
-      MINIO_HOST: localhost:9000
+      MINIO_HOST: minio:9000
     depends_on:
       - rabbitmq
     networks:

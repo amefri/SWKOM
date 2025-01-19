@@ -113,7 +113,7 @@ def listen_for_files_to_process():
 if __name__ == '__main__':
     try:
         listen_for_files_to_process()
-        write_content_to_rabbitmq("/tmp/blabla", "Hallo Welt")
+        #write_content_to_rabbitmq("/tmp/blabla", "Hallo Welt")
     except KeyboardInterrupt:
         print('Interrupted')
         try:
