@@ -2,13 +2,13 @@ version: '3.8'
 
 services:
   db:
-    build: db/
+    image: docker.io/library/postgres:16.4-alpine
     container_name: paperless-db
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: paperlessdb
+      POSTGRES_DATABASE: paperlessdb
     ports:
       - "5432:5432"
     volumes:
@@ -22,7 +22,7 @@ services:
       retries: 5
 
   rest:
-    build: ./out
+    build: rest-api
     container_name: rest
     restart: unless-stopped
     ports:
@@ -79,7 +79,7 @@ services:
       retries: 3
 
   minio:
-    image: minio/minio:latest
+    image: quay.io/minio/minio:latest
     container_name: minio
     environment:
       MINIO_ROOT_USER: admin

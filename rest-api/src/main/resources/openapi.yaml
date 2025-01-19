@@ -1,0 +1,158 @@
+openapi: 3.1.0
+info:
+  contact:
+    name: "Frimberger, Tetcu"
+    url: https://github.com/amefri/SWKOM/tree/main
+  title: Paperless REST-Server
+  version: 1.0.0
+servers:
+- url: localhost:8081
+tags:
+- description: Paperless REST-Api
+  name: paperless
+paths:
+  /api/documents/post_document:
+    post:
+      operationId: postDocument
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/postDocument_request'
+      responses:
+        "200":
+          description: Document successfully uploaded.
+        "400":
+          description: Document upload failed due to bad request!
+      summary: Upload a document
+      tags:
+      - paperless
+      x-content-type: multipart/form-data
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: paperless
+  /api/documents:
+    get:
+      operationId: getDocuments
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/documents'
+          description: Success
+      summary: Return a list of documents
+      tags:
+      - paperless
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: paperless
+  /api/documents/{id}:
+    delete:
+      operationId: deleteDocument
+      parameters:
+      - description: The id of the document
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "204":
+          description: Document deleted successfully
+        "404":
+          description: Document does not exist with this id!
+      summary: Delete a document by id
+      tags:
+      - paperless
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: paperless
+    get:
+      operationId: getDocument
+      parameters:
+      - description: The id of the document
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/document'
+          description: Success
+        "404":
+          description: Document does not exist with this id!
+      summary: Retrieve a document by id
+      tags:
+      - paperless
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: paperless
+    put:
+      operationId: updateDocument
+      parameters:
+      - description: The id of document
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "204":
+          description: Document updated successfully
+        "404":
+          description: Document does not exist with this id
+      summary: Update a document by id
+      tags:
+      - paperless
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: paperless
+components:
+  schemas:
+    document:
+      example:
+        author: author
+        created: created
+        id: 0
+        title: title
+      properties:
+        id:
+          description: The id of the document
+          type: integer
+        title:
+          description: The title of the document
+          type: string
+        author:
+          description: The author of the document's contents
+          type: string
+        created:
+          type: string
+      required:
+      - title
+    documents:
+      items:
+        $ref: '#/components/schemas/document'
+      type: array
+    postDocument_request:
+      properties:
+        document:
+          type: string
+        file:
+          format: binary
+          type: string
