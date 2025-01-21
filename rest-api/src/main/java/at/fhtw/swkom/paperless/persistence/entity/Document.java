@@ -7,10 +7,9 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+
+
+
 @Entity
 @Table(name = "document")
 @EntityListeners(AuditingEntityListener.class)
@@ -42,5 +41,64 @@ public class Document {
         this.author = author;
         this.content = content;
         this.created = created;
+    }
+    public Document() {
+    }
+
+    public Document(Integer id, String title, String author, String content, LocalDateTime created, String minioFileName) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.content = content;
+        this.created = created;
+        this.minioFileName = minioFileName;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public LocalDateTime getCreated() {
+        return created;
+    }
+
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
+    }
+
+    public String getMinioFileName() {
+        return minioFileName;
+    }
+
+    public void setMinioFileName(String minioFileName) {
+        this.minioFileName = minioFileName;
     }
 }

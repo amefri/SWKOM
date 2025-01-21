@@ -4,7 +4,7 @@ public class DocumentDTO {
 
     private Integer id;
     private String title;
-    private String filename;
+    private String minioFileName; //TODO:
     private String author;
     private String created;
 
@@ -41,10 +41,10 @@ public class DocumentDTO {
         this.created = created;
     }
 
-    public String getFilename() {
-        return filename;
+    public String getMinioFileName() {
+        return minioFileName;
     }
-    public void setFilename(String filename) {
-        this.filename = filename;
+    public void setMinioFileName(String minioFileName) {
+        this.minioFileName = minioFileName;
     }
 }

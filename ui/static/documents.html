@@ -75,10 +75,10 @@
                     <a class="nav-link" href="/">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="/documents.html">Documents</a>
+                    <a class="nav-link active" href="documents.html">Documents</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/upload.html">Upload</a>
+                    <a class="nav-link" href="upload.html">Upload</a>
                 </li>
             </ul>
         </div>
@@ -141,7 +141,7 @@
                     <tr id="doc-row-${document.id}">
                         <th scope="row">${document.id}</th>
                         <td>${document.title}</td>
-                        <td>${new Date(document.created).toLocaleDateString()}</td>
+                        <td>${new Date(document.create).toLocaleDateString()}</td>
                         <td>
                             <button class="btn btn-primary btn-sm" title="View Document">View</button>
                             <button class="btn btn-danger btn-sm delete-btn" data-id="${document.id}" title="Delete Document">Delete</button>
