@@ -3,12 +3,12 @@ version: '3.8'
 services:
   db:
     image: docker.io/library/postgres:16.4-alpine
-    container_name: paperless-db
+    container_name: postgres
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DATABASE: paperlessdb
+      POSTGRES_DATABASE: postgres #hier maybe
     ports:
       - "5432:5432"
     volumes:
@@ -16,7 +16,7 @@ services:
     networks:
       - app-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d paperlessdb"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
       interval: 30s
       timeout: 10s
       retries: 5
