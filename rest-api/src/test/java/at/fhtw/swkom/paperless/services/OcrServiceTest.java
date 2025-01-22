@@ -29,15 +29,17 @@ class OcrServiceTest {
 
     @Test
     void testProcessDocument_success() throws Exception {
-        // Test for successful OCR processing
+        // Test for successful OCR processing -> file passed to Tesseract library and Tesseract prossesing file(extraxting text)
         File mockFile = mock(File.class);
         String language = "eng";
         String expectedText = "This is the extracted text.";
 
+        //doOCR method of Tesseract is called with mockFile as argument and returns expectedText
         when(tesseract.doOCR(mockFile)).thenReturn(expectedText);
 
         String result = ocrService.processDocument(mockFile, language);
 
+        //The result of processDocument should match the expectedText returned by Tesseract
         assertEquals(expectedText, result);
         verify(tesseract, times(1)).setLanguage(language);
         verify(tesseract, times(1)).doOCR(mockFile);
@@ -46,11 +48,12 @@ class OcrServiceTest {
 
     @Test
     void testStreamToFile_success() throws Exception {
-        // Test for successfully converting InputStream to a temporary file
+        //Test for successfully converting InputStream to a temporary file
+        //Tests streamToFile method in OcrService Class
         String content = "This is a test content.";
         InputStream inputStream = new ByteArrayInputStream(content.getBytes());
         String filename = "testFile";
-
+        //Converts an InputStream (simulating a file's content) to a temporary file
         File result = OcrService.streamToFile(inputStream, filename);
 
         assertNotNull(result);

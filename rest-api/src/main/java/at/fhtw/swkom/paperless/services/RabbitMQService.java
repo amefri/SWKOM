@@ -18,8 +18,10 @@ import java.util.Arrays;
 @Log
 @Service
 public class RabbitMQService {
+    //Manages messaging for OCR processing
 
     private final RabbitTemplate rabbitTemplate;
+    //Worker listens to this queue!
     @Value("${rabbitmq.toOcrWorker}")
     private String routingKey;
     private final ObjectMapper objectMapper;
@@ -31,6 +33,8 @@ public class RabbitMQService {
         this.documentRepository = documentRepository;
     }
 
+    //Sends message to RabbitMQ with file path in MinIO
+    //Worker receives this path
     public void sendToOCRWorker(String filename) {
         rabbitTemplate.convertAndSend(routingKey, filename);
         log.info("Sent "+filename+" to OCR worker");

@@ -15,6 +15,8 @@ public class RabbitConsumer {
         this.workerService = workerService;
     }
 
+    //2. Listens for messages, retrieves the file from MinIO and performs OCR using Tesseract
+    //Saves the extracted text in the database after
     @RabbitListener(queues = "ocr-queue")//TODO: Add queue name
     public void listen(String message) {
         try {

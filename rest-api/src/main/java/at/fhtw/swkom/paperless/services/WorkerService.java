@@ -8,6 +8,7 @@ import java.io.InputStream;
 
 @Service
 public class WorkerService {
+//Coordinates file retrieval, OCR processing and database storage
 
     private final MinioService minioService;
     private final OcrService ocrService;

@@ -58,25 +58,6 @@ public class DocumentService {
         documentRepository.deleteById(id);
     }
 
-    // Process and save a document with OCR
-    public Document processAndSaveDocument(File file, String title, String author, String language) {
-        try {
-            // Perform OCR on the file
-            String extractedText = ocrService.processDocument(file, language);
-
-            // Create a new Document entity
-            Document document = new Document();
-            document.setTitle(title);
-            document.setAuthor(author);
-            document.setContent(extractedText);
-
-            // Save the document to the database
-            return documentRepository.save(document);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to process and save the document", e);
-        }
-    }
-
     public Optional<DocumentDTO> create(String document, MultipartFile file) {
         final String fileNameBucket;
         try {

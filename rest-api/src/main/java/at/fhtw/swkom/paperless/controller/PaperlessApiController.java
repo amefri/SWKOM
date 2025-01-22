@@ -38,6 +38,9 @@ public class PaperlessApiController implements PaperlessApi {
     private final RabbitMQProducer rabbitMQProducer;
     private final MinioService minioService;
 
+    //This class handles the API endpoints for the Paperless application
+    //Endpoints defined in the PaperlessApi Interface
+    //Controller accepts the API requests and delegates the tasks
     @Autowired
     public PaperlessApiController(DocumentService documentService,
                                   DocumentMapper documentMapper,
@@ -75,6 +78,7 @@ public class PaperlessApiController implements PaperlessApi {
     }
 
 
+    //1. When a file is uploaded, this method uploads it to MinIO and a message is sent to RabbitMQ to initiate OCR
     @Override
     public ResponseEntity<Void> postDocument(
             @RequestParam(value = "document", required = false) String document,

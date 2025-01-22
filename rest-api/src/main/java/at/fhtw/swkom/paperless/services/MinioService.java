@@ -14,6 +14,7 @@ import java.util.UUID;
 @Log
 @Service
 public class MinioService {
+//handles file storage and retrieval
 
     private final MinioClient minioClient;
 

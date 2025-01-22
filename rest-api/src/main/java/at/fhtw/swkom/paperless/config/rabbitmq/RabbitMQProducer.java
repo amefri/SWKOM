@@ -13,7 +13,7 @@ public class RabbitMQProducer {
     public void sendMessage(String message) {
         try {
             ConnectionFactory factory = new ConnectionFactory();
-            factory.setHost("rabbitmq"); // Match your Docker service name
+            factory.setHost("rabbitmq"); //matches docker host name
             factory.setUsername("user");
             factory.setPassword("password");
 
