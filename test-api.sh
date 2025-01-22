@@ -2,7 +2,7 @@
 
 # URL der API
 BASE_URL="http://localhost:8081/api/documents"
-DOC_ID="20"
+DOC_ID="1"
 
 # Funktion zur Überprüfung der HTTP-Statuscodes
 check_response() {

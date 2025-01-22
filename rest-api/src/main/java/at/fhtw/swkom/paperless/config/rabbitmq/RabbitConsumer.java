@@ -15,7 +15,7 @@ public class RabbitConsumer {
         this.workerService = workerService;
     }
 
-    @RabbitListener(queues = "ocr-queue")//TODO: Add queue name
+    @RabbitListener(queues = "ocr.toWorker")//TODO: Add queue name
     public void listen(String message) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
